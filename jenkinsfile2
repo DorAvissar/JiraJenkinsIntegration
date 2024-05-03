@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    environment {
+        JIRA_URL = 'https://your-jira-instance.atlassian.net'
+        JIRA_ISSUE_KEY = 'YOUR-JIRA-ISSUE-KEY'
+        JIRA_USER = 'your-jira-email@example.com' // Jira user with appropriate permissions
+        JIRA_API_TOKEN = credentials('jira-api-token') // Store your Jira API token as a Jenkins credential
+    }
+
+    stages {
+        stage('Update Jira to Done') {
+            steps {
+                script {
+                    // Jira REST API endpoint to transition an issue
+                    def jiraTransitionEndpoint = "${JIRA_URL}/rest/api/3/issue/${JIRA_ISSUE_KEY}/transitions"
+
+                    // Transition to "Done" status (you'll need to find the correct transition ID for "Done")
+                    def transitionData = [
+                        'transition': [
+                            'id': '21' // ID for the "Done" transition, replace with the correct one
+                        ]
+                    ]
+
+                    // Send a POST request to Jira to update the issue's status
+                    httpRequest(
+                        httpMode: 'POST',
+                        url: jiraTransitionEndpoint,
+                        contentType: 'APPLICATION_JSON',
+                        requestBody: groovy.json.JsonOutput.toJson(transitionData),
+                        customHeaders: [
+                            [name: 'Authorization', value: "Basic ${JIRA_USER}:${JIRA_API_TOKEN}".bytes.encodeBase64().toString()]
+                        ]
+                    )
+                }
+            }
+        }
+    }
+}
