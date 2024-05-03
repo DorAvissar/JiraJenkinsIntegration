@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('error') {
+    stage('jenkinsfile') {
       agent any
       steps {
         sh 'echo "hello world"'
