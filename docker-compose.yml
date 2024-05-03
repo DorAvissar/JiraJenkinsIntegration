@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  jira:
+  jira:  
     image: atlassian/jira-software:9.14.0
     ports:
       - "9090:8080"
@@ -15,7 +15,6 @@ services:
       - jira_data:/var/atlassian/jira
     networks:
       - atlassian
-
   confluence:
     image: atlassian/confluence-server:latest
     ports:
@@ -51,12 +50,13 @@ services:
       - pg_data:/var/lib/postgresql/data
     networks:
       - atlassian
-
+  
 volumes:
   jira_data:
   confluence_data:
   jenkins_home:
   pg_data:
+
 
 networks:
   atlassian:
