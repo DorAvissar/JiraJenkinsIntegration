@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        JIRA_URL = 'https://your-jira-instance.atlassian.net'
-        JIRA_ISSUE_KEY = 'YOUR-JIRA-ISSUE-KEY'
-        JIRA_USER = 'your-jira-email@example.com' // Jira user with appropriate permissions
-        JIRA_API_TOKEN = credentials('jira-api-token') // Store your Jira API token as a Jenkins credential
+        JIRA_URL = 'https://4323-2a0d-6fc2-119c-1d00-d9e1-36df-b648-d8d0.ngrok-free.app/'
+        JIRA_ISSUE_KEY = 'MET-1'
+        JIRA_USER = 'jira' // Jira user with appropriate permissions
+        JIRA_API_TOKEN = credentials('jira_cred') // Store your Jira API token as a Jenkins credential
     }
 
     stages {
