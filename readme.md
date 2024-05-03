@@ -12,4 +12,6 @@ step 2 - 2. Create application link between Jira and Confluence
  why? 
  1. With an application link, users can seamlessly navigate between Jira issues and Confluence pages
  2. With the integration, you can search across both Jira and Confluence. This is useful when you need to find related documentation or track down the context behind an issue or task.
- 3. hkjnkj
+
+step 3 - Connect Jenkins to a Git repository 
+
