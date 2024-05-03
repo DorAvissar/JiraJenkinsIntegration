@@ -1,4 +1,4 @@
-step1 - Deploy the following services: ! 
+step1 - Deploy the following services: ! ! 
 a. Jira server
 b. Confluence server
 c. Jenkins server 
