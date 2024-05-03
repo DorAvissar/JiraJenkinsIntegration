@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        JIRA_URL = 'https://4323-2a0d-6fc2-119c-1d00-d9e1-36df-b648-d8d0.ngrok-free.app/' // Base URL for Jira
-        JIRA_ISSUE_KEY = 'MET-1' // Key for the Jira issue to be updated
+        JIRA_URL = 'https://4323-2a0d-6fc2-119c-1d00-d9e1-36df-b648-d8d0.ngrok-free.app/' // Jira URL
+        JIRA_ISSUE_KEY = 'MET-1' // Jira issue key
         JIRA_USER = 'jira' // Jira username
         JIRA_API_TOKEN = credentials('jira_cred') // Jenkins credential for Jira API token
     }
@@ -12,21 +12,19 @@ pipeline {
         stage('Update Jira to Done') {
             steps {
                 script {
-                    // Jira REST API endpoint to transition an issue
                     def jiraTransitionEndpoint = "${JIRA_URL}rest/api/3/issue/${JIRA_ISSUE_KEY}/transitions"
 
-                    // Data for transitioning the issue to "Done"
+                    // Transition ID for "Done"; ensure this ID is correct for your Jira workflow
                     def transitionData = [
                         'transition': [
-                            'id': '21' // Transition ID for "Done"; ensure this is correct
+                            'id': '21' 
                         ]
                     ]
 
-                    // Generate Base64-encoded authorization header without using getBytes()
+                    // Generate the authorization header manually
                     def authString = "${JIRA_USER}:${JIRA_API_TOKEN}"
-                    def encodedAuthString = authString.bytes.encodeBase64().toString()
+                    def encodedAuthString = Base64.getEncoder().encodeToString(authString.getBytes("UTF-8"))
 
-                    // Send a POST request to Jira to update the issue's status
                     httpRequest(
                         httpMode: 'POST',
                         url: jiraTransitionEndpoint,
