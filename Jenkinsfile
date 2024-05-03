@@ -1,9 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('') {
+    stage('add a comment to issue') {
       steps {
-        jiraComment(issueKey: 'MET-1', body: 'dorrrrrrr')
+        jiraComment(issueKey: 'MET-1', body: 'from jenkkins')
       }
     }
 
