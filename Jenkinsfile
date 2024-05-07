@@ -2,8 +2,9 @@ pipeline {
   agent any
   
   environment {
-    JIRA_CREDENTIALS_ID = 'jira_cred' // ID of Jenkins credentials for Jira
-    JIRA_BASE_URL = 'http://172.206.241.10:8080/' // Your Jira instance URL
+    JIRA_CREDENTIALS_ID = 'jira_cred' // Jenkins credentials ID for Jira
+    JIRA_BASE_URL = 'http://172.206.241.10:8080/' // Jira instance URL
+    JIRA_SITE_NAME = 'jira' // Jira site name configured in Jenkins
   }
   
   stages {
@@ -16,9 +17,8 @@ pipeline {
     stage('Add Comment to Jira') {
       steps {
         script {
-          withEnv(['JIRA_SITE=jira']) {
-            // Provide a comment body for the jiraAddComment step
-            jiraAddComment idOrKey: 'MET-3', comment: 'Test comment from Jenkins' // Corrected syntax
+          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) { // Ensure correct Jira site name
+            jiraAddComment(idOrKey: 'MET-3', comment: 'Test comment from Jenkins')
           }
         }
       }
@@ -27,16 +27,17 @@ pipeline {
     stage('Transition Jira Issue to Done') {
       steps {
         script {
-          def issueKey = 'MAT-2' // Jira issue key to update
+          def issueKey = 'MET-2' // Jira issue key to update
           def transitionId = '31' // Transition ID for "Done"
 
-          // Transition the Jira issue to "Done"
-          jiraTransitionIssue(
-            issueSelector: [issueKey: issueKey], 
-            transitionId: transitionId,
-            jiraUrl: JIRA_BASE_URL,
-            credentialsId: JIRA_CREDENTIALS_ID
-          )
+          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) { // Ensure correct Jira site name
+            jiraTransitionIssue(
+              issueSelector: [issueKey: issueKey], 
+              transitionId: transitionId,
+              jiraUrl: JIRA_BASE_URL,
+              credentialsId: JIRA_CREDENTIALS_ID
+            )
+          }
           
           echo "Jira issue ${issueKey} transitioned to Done (ID: ${transitionId})."
         }
