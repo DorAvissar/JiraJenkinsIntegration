@@ -7,6 +7,14 @@ pipeline {
   }
   
   stages {
+    steps {
+      script {
+        withEnv(['JIRA_SITE=jira']) {
+        def comment = [ body: 'Test comment from Jenkins' ]
+        jiraAddComment idOrKey: 'MET-3', input: 'comment DOR'
+      }
+      }
+    }
     stage('Transition Jira Issue to Done') {
       steps {
         script {
