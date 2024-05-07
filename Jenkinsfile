@@ -17,7 +17,7 @@ pipeline {
     stage('Add Comment to Jira') {
       steps {
         script {
-          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) { // Ensure correct Jira site
+          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
             jiraAddComment(idOrKey: 'MET-3', comment: 'Test comment from Jenkins')
           }
         }
@@ -28,18 +28,18 @@ pipeline {
       steps {
         script {
           def issueKey = 'MET-3' // The Jira issue key
-          def transitionId = '31' // The transition ID for "Done"
+          def transitionName = 'Done' // The transition name for "Done"
 
-          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) { // Ensure the Jira site is set
+          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
             jiraTransitionIssue(
-              issueSelector: [key: issueKey], // Corrected parameter for issueSelector
-              transitionId: transitionId,
+              issueSelector: [key: issueKey], // Corrected parameter
+              transitionName: transitionName, // Use transition name instead of ID
               jiraUrl: JIRA_BASE_URL,
               credentialsId: JIRA_CREDENTIALS_ID
             )
           }
           
-          echo "Attempted to transition Jira issue ${issueKey} to Done (ID: ${transitionId})."
+          echo "Attempted to transition Jira issue ${issueKey} to Done."
         }
       }
     }
