@@ -9,7 +9,7 @@ pipeline {
 
     stage('command') {
       steps {
-        jiraComment(issueKey: 'MET-3', body: 'from jenkins 2.0')
+        jiraTransitionIssue(issueKey: 'MET-3', transitionId: '31')
       }
     }
 
