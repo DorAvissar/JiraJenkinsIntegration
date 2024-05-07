@@ -1,40 +1,43 @@
 pipeline {
-    agent any
+    agent any // Any available agent
 
-    steps {
-         stage('Hello World') {
+    stages {
+        stage('Hello World') { // Stage for basic confirmation
             steps {
-                sh 'echo "Hello World!"' // Basic stage to confirm pipeline starts
+                sh 'echo "Hello World!"' // Basic step to ensure the pipeline starts
             }
         }
-        script {
-            // Get the commit history for the main branch
-            def mainBranchCommits = git changelog(branch: 'main')
 
-            // Find the last commit message that mentions a merge
-            def lastMergeCommit = mainBranchCommits.find { commit ->
-                commit.msg =~ /Merge (.*) into main/
+        stage('Get Merged Branch Name') { // Stage to get the branch name after the last merge
+            steps {
+                script { // Using a script block to execute Groovy code
+                    // Get the commit history for the current branch
+                    def gitCommits = sh(script: 'git log --pretty=format:%s -n 10', returnStdout: true).trim().split('\n')
+
+                    // Find the last commit message that indicates a merge
+                    def lastMergeCommit = gitCommits.find { commit ->
+                        commit.contains('Merge ')
+                    }
+
+                    // Extract the branch name from the merge commit message
+                    def mergedBranchName = 'No recent merges found'
+                    if (lastMergeCommit) {
+                        def matcher = lastMergeCommit =~ /Merge (.*) into/
+                        if (matcher.find()) {
+                            mergedBranchName = matcher.group(1).trim()
+                        }
+                    }
+
+                    // Output the branch name
+                    echo "Branch name merged into main: ${mergedBranchName}"
+                }
             }
+        }
+    }
 
-            // Extract the branch name from the merge commit message (if found)
-            def mergedBranchName = lastMergeCommit?.msg =~ /Merge (.*) into main/ ? (captures()[0]) : 'No recent merges found'
-
-            // Print the branch name
-            echo "Branch name merged to main: ${mergedBranchName}"
+    post {
+        always {
+            echo "Pipeline completed."
         }
     }
 }
-
-
-// pipeline {
-//   agent any
-//   stages {
-//     stage('add a comment to issue') {
-//       steps {
-//         jiraComment(issueKey: 'MET-1', body: 'from jenkkins')
-//       }
-//     }
-
-//   }
-// }
-
