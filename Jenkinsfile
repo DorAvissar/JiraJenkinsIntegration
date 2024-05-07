@@ -1,24 +1,23 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Hello World') {
-            steps {
-                sh 'echo "Hello World!"'
-            }
-        }
-
-        stage('Update Jira Issue') {
-            steps {
-                jiraComment(issueKey: 'MET-3', body: 'from jenkins')
-                jiraTransitionIssue(issueKey: 'MET-3', transition: 'Done')
-            }
-        }
+  agent any
+  stages {
+    stage('Hello World') {
+      steps {
+        sh 'echo "Hello World!"'
+      }
     }
 
-    post {
-        always {
-            echo 'Pipeline completed.'
-        }
+    stage('command') {
+      steps {
+        jiraComment(issueKey: 'MET-3', body: 'from jenkins 2.0')
+      }
     }
+
+  }
+  post {
+    always {
+      echo 'Pipeline completed.'
+    }
+
+  }
 }
