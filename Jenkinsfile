@@ -17,16 +17,15 @@ pipeline {
     stage('Get Last Merged Branch Name') {
       steps {
         script {
-          // Get the last commit message
-          def lastCommitMessage = sh(script: 'git log -1 --merges --pretty=format:%s', returnStdout: true).trim()
-          
-          // Extract the branch name from the commit message if it's a merge commit
-          def mergeBranchPattern = ~/Merge pull request #(.*?) from (.*)/
+          // Get the last commit message and extract the branch name
+          def lastCommitMessage = sh(script: 'git log -1 --pretty=format:%s', returnStdout: true).trim()
+
+          // Define a pattern to extract the branch name from the commit message
+          def mergeBranchPattern = ~/Merge pull request #\d+ from (.+)/
           def matcher = lastCommitMessage =~ mergeBranchPattern
-          
+
           if (matcher.find()) {
-            // The branch name from which the pull request originated
-            env.JIRA_ISSUE_KEY = matcher.group(2).trim()
+            env.JIRA_ISSUE_KEY = matcher.group(1).trim()
           } else {
             error("No merge found into 'main'. Unable to determine Jira issue key.")
           }
@@ -39,7 +38,14 @@ pipeline {
         script {
           if (env.JIRA_ISSUE_KEY) {
             withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
-              jiraAddComment(idOrKey: env.JIRA_ISSUE_KEY, comment: 'Test comment from Jenkins 0.20.2')
+              // Validate the extracted issue key
+              def issueKey = env.JIRA_ISSUE_KEY
+              if (issueKey.contains("/")) {
+                error("Invalid Jira issue key: ${issueKey}. Contains invalid character '/'.")
+              }
+              
+              // Add a comment to the Jira issue
+              jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
             }
           }
         }
@@ -50,11 +56,13 @@ pipeline {
       steps {
         script {
           if (env.JIRA_ISSUE_KEY) {
-            def transitionName = 'Done' // Transition name for "Done"
-
             withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
+              def issueKey = env.JIRA_ISSUE_KEY
+              def transitionName = 'Done'
+
+              // Transition the Jira issue to "Done"
               jiraTransitionIssue(
-                issueSelector: [key: env.JIRA_ISSUE_KEY], 
+                issueSelector: [key: issueKey],
                 transitionName: transitionName,
                 jiraUrl: JIRA_BASE_URL,
                 credentialsId: JIRA_CREDENTIALS_ID
