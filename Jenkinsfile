@@ -30,9 +30,10 @@ pipeline {
           def issueKey = 'MET-2' // Jira issue key to update
           def transitionId = '31' // Transition ID for "Done"
 
-          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) { // Ensure correct Jira site name
+          // Ensure the correct environment variable is set
+          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
             jiraTransitionIssue(
-              issueSelector: [issueKey: issueKey], 
+              issueSelector: [key: issueKey], // Corrected syntax for issueSelector
               transitionId: transitionId,
               jiraUrl: JIRA_BASE_URL,
               credentialsId: JIRA_CREDENTIALS_ID
