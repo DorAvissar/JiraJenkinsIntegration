@@ -36,9 +36,14 @@ pipeline {
     stage('Add Comment to Jira') {
       steps {
         script {
-          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
-            def issueKey = env.JIRA_ISSUE_KEY
-            jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
+          def issueKey = env.JIRA_ISSUE_KEY
+
+          if (issueKey) {
+            withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
+              jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
+            }
+          } else {
+            error("Jira issue key is null. Cannot add comment.")
           }
         }
       }
@@ -47,20 +52,20 @@ pipeline {
     stage('Transition Jira Issue to Done') {
       steps {
         script {
-          def issueKey = env.JIRA_ISSUE_KEY // Derived Jira issue key
-          def transitionName = 'Done' // Transition name for "Done"
+          def issueKey = env.JIRA_ISSUE_KEY
+          def transitionName = 'Done'
 
           if (issueKey && transitionName) {
             withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
               jiraTransitionIssue(
-                issueSelector: [key: issueKey], // Corrected parameter
+                issueSelector: [issueKey: issueKey], // Corrected parameter for issueSelector
                 transitionName: transitionName,
                 jiraUrl: JIRA_BASE_URL,
                 credentialsId: JIRA_CREDENTIALS_ID
               )
             }
           } else {
-            error("Missing required information: issueKey or transitionName is null.")
+            error("Cannot transition Jira issue to Done. Required parameters are missing.")
           }
         }
       }
