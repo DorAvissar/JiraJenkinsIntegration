@@ -7,15 +7,17 @@ pipeline {
   }
   
   stages {
-    steps {
-      script {
-        withEnv(['JIRA_SITE=jira']) {
-        def comment = [ body: 'Test comment from Jenkins' ]
-        jiraAddComment idOrKey: 'MET-3', input: 'comment DOR'
-      }
+    stage('Add Comment to Jira') { // This is a named stage
+      steps {
+        script {
+          withEnv(['JIRA_SITE=jira']) {
+            jiraAddComment(idOrKey: 'MET-3', input: 'comment DOR') // Corrected syntax
+          }
+        }
       }
     }
-    stage('Transition Jira Issue to Done') {
+
+    stage('Transition Jira Issue to Done') { // This is another named stage
       steps {
         script {
           def issueKey = 'MET-2' // The Jira issue key to update
@@ -37,7 +39,7 @@ pipeline {
 
   post {
     always {
-      echo 'Pipeline completed.'
+      echo 'Pipeline completed.' // This runs after all stages
     }
   }
 }
