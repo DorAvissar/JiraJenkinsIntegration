@@ -1,62 +1,60 @@
 pipeline {
-    agent any // Use any available Jenkins agent/worker
+    agent any // Use any available Jenkins agent/worker   
+    environment {
+        JIRA_URL = 'http://172.206.241.10:8080/' // Your Jira instance URL
+        JIRA_CREDENTIALS_ID = 'jira_cred' // The ID of your Jira credentials in Jenkins
+    }
+
     stages {
-        stage('Hello World') { // A simple stage for demonstration
+        stage('Hello World') {
             steps {
-                sh 'echo "Hello World!"' // Echo a message to confirm pipeline starts
+                sh 'echo "Hello World!"' // Basic stage to confirm pipeline starts
             }
         }
 
-        stage('Checkout') { // Stage to check out the Git repository
+        stage('Extract Branch Name') {
             steps {
-                // Checkout the repository and determine the branch name
                 script {
-                    def scmVars = checkout scm
-                    def branchName = scmVars.BRANCH_NAME
-                    echo "Checked out branch: ${branchName}"
+                    // Extract the branch name from the last merge
+                    def branchName = sh(script: "git log -1 --pretty=%D | cut -d ',' -f 1", returnStdout: true).trim()
+                    echo "Extracted Branch Name: ${branchName}"
+                    env.BRANCH_NAME = branchName
                 }
             }
         }
 
-        stage('Check Jira Issue') { // Stage to check Jira issue based on branch name
+        stage('Check Jira Issue') {
             steps {
                 script {
-                    // Regex pattern to identify a Jira issue key (e.g., EX-123)
-                    def jiraPattern = ~/^[A-Z]+-\d+$/
-                    def branchName = env.BRANCH_NAME // Get the branch name from environment variables
+                    // Check if the extracted branch name matches a Jira issue key pattern
+                    def jiraIssuePattern = ~/^[A-Z]+-\d+$/
+                    def branchName = env.BRANCH_NAME
+                    echo "Checking branch name against Jira issue pattern: ${branchName}"
 
-                    if (branchName == null) {
-                        error("Branch name is not available")
-                    }
+                    if (jiraIssuePattern.matcher(branchName).matches()) {
+                        // You need to use a custom Groovy script or a Jenkins plugin to interact with Jira
+                        def jira = new JiraAPI(JIRA_URL, JIRA_CREDENTIALS_ID) // Custom class or plugin-based
+                        def issue = jira.getIssue(branchName)
 
-                    if (jiraPattern.matcher(branchName).matches()) { // Check if it matches the Jira pattern
-                        echo "Branch name ${branchName} matches Jira issue key pattern"
-                        // Assuming you have a Jenkins plugin for Jira interaction
-                        // Update Jira issue to "Done"
-                        jiraIssueUpdate(branchName, 'Done') // This is a fictional method; replace with actual code
+                        if (issue) {
+                            echo "Success: Jira issue exists: ${branchName}"
+                        } else {
+                            echo "Not Exists: No Jira issue found for: ${branchName}"
+                        }
                     } else {
-                        echo "Branch name ${branchName} does not match Jira issue key pattern"
+                        echo "Branch name does not match a Jira issue key pattern: ${branchName}"
                     }
                 }
             }
         }
     }
-}
 
-def jiraIssueUpdate(issueKey, newStatus) {
-    // Requires the Jenkins Jira Plugin
-    jiraIssueSelector = [$class: 'IssueSelector$IssueKey', issueKey: issueKey]
-    
-    // Transition the Jira issue to the new status
-    jiraTransition = [$class: 'Transition', name: newStatus]
-    
-    // Update the Jira issue's status
-    jiraSubmit = jiraIssueSelector & jiraTransition
-    
-    jiraSubmit.apply() // This triggers the update
-    echo "Updated Jira issue ${issueKey} to status: ${newStatus}"
+    post {
+        always {
+            echo "Pipeline completed"
+        }
+    }
 }
-
 
 
 // pipeline {
