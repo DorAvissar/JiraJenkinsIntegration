@@ -39,7 +39,7 @@ pipeline {
         script {
           if (env.JIRA_ISSUE_KEY) {
             withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
-              jiraAddComment(idOrKey: env.JIRA_ISSUE_KEY, comment: 'Test comment from Jenkins')
+              jiraAddComment(idOrKey: env.JIRA_ISSUE_KEY, comment: 'Test comment from Jenkins 0.20.2')
             }
           }
         }
