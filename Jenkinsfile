@@ -36,17 +36,9 @@ pipeline {
     stage('Add Comment to Jira') {
       steps {
         script {
-          if (env.JIRA_ISSUE_KEY) {
-            withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
-              // Validate the extracted issue key
-              def issueKey = env.JIRA_ISSUE_KEY
-              if (issueKey.contains("/")) {
-                error("Invalid Jira issue key: ${issueKey}. Contains invalid character '/'.")
-              }
-              
-              // Add a comment to the Jira issue
-              jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
-            }
+          withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
+            def issueKey = env.JIRA_ISSUE_KEY
+            jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
           }
         }
       }
@@ -55,19 +47,20 @@ pipeline {
     stage('Transition Jira Issue to Done') {
       steps {
         script {
-          if (env.JIRA_ISSUE_KEY) {
-            withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
-              def issueKey = env.JIRA_ISSUE_KEY
-              def transitionName = 'Done'
+          def issueKey = env.JIRA_ISSUE_KEY // Derived Jira issue key
+          def transitionName = 'Done' // Transition name for "Done"
 
-              // Transition the Jira issue to "Done"
+          if (issueKey && transitionName) {
+            withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
               jiraTransitionIssue(
-                issueSelector: [key: issueKey],
+                issueSelector: [key: issueKey], // Corrected parameter
                 transitionName: transitionName,
                 jiraUrl: JIRA_BASE_URL,
                 credentialsId: JIRA_CREDENTIALS_ID
               )
             }
+          } else {
+            error("Missing required information: issueKey or transitionName is null.")
           }
         }
       }
