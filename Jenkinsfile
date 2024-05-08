@@ -51,7 +51,6 @@ pipeline {
 
     stage('Transition Jira Issue to Done') {
       steps {
-          def issueKey = env.JIRA_ISSUE_KEY
           withEnv(['JIRA_SITE=jira']) {
             def transitionInput =
             [
