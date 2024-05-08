@@ -31,21 +31,6 @@ pipeline {
       }
     }
 
-    stage('Add Comment to Jira') {
-      steps {
-        script {
-          def issueKey = env.JIRA_ISSUE_KEY
-          if (issueKey) {
-            withEnv(["JIRA_SITE=${JIRA_SITE_NAME}"]) {
-              jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
-            }
-          } else {
-            error("Jira issue key is null. Cannot add comment.")
-          }
-        }
-      }
-    }
-
     stage('Transition Jira Issue to Done') {
       steps {
         script {
@@ -55,10 +40,15 @@ pipeline {
           if (issueKey) {
             withEnv(["JIRA_SITE=${JIRA_SITE_NAME}"]) {
               jiraTransitionIssue(
-                issueSelector: [key: issueKey], // Corrected parameter for issueSelector
-                transitionId: transitionId, // Corrected parameter for transition
+                issueSelector: [issueKey: issueKey], // Correct parameter for issueSelector
+                transition: [id: transitionId], // Corrected transition parameter
                 jiraUrl: JIRA_BASE_URL,
-                credentialsId: JIRA_CREDENTIALS_ID
+                credentialsId: JIRA_CREDENTIALS_ID,
+                update: [
+                  comment: [
+                    [add: [body: "Transitioning to Done from Jenkins Pipeline."]]
+                  ]
+                ]
               )
             }
           } else {
