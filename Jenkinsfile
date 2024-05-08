@@ -2,8 +2,9 @@ pipeline {
   agent any
   
   environment {
+    JIRA_CREDENTIALS_ID = 'jira_cred' // Jenkins credentials ID for Jira
     JIRA_BASE_URL = 'http://172.206.241.10:8080/' // Jira instance URL
-    TRANSITION_ID = '31' // Transition ID for "Done"
+    JIRA_SITE_NAME = 'jira' // Jira site name configured in Jenkins
   }
   
   stages {
@@ -16,8 +17,10 @@ pipeline {
     stage('Get Last Merged Branch Name') {
       steps {
         script {
+          // Get the last commit message and extract the branch name
           def lastCommitMessage = sh(script: 'git log -1 --pretty=format:%s', returnStdout: true).trim()
 
+          // Define a pattern to extract the branch name from the commit message
           def mergeBranchPattern = ~/Merge pull request #\d+ from (.+)/
           def matcher = lastCommitMessage =~ mergeBranchPattern
 
@@ -30,43 +33,39 @@ pipeline {
       }
     }
 
-    stage('Transition Jira Issue to Done') {
+    stage('Add Comment to Jira') {
       steps {
         script {
           def issueKey = env.JIRA_ISSUE_KEY
 
           if (issueKey) {
-            // Use 'withCredentials' to securely get credentials
-            withCredentials([usernamePassword(credentialsId: 'jira_cred', passwordVariable: 'JIRA_PASSWORD', usernameVariable: 'JIRA_USER')]) {
-              sh """
-                curl -X POST \
-                -u \${JIRA_USER}:\${JIRA_PASSWORD} \
-                -H 'Content-Type: application/json' \
-                -d '{
-                  "transition": {
-                    "id": "${TRANSITION_ID}"
-                  },
-                  "update": {
-                    "comment": [
-                      {
-                        "add": {
-                          "body": "Transitioning to Done from Jenkins Pipeline."
-                        }
-                      }
-                    ]
-                  }
-                }' \
-                \${JIRA_BASE_URL}/rest/api/2/issue/\${issueKey}/transitions
-              """
+            withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
+              jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
             }
           } else {
-            error("Cannot transition Jira issue to Done. The JIRA_ISSUE_KEY environment variable is missing.")
+            error("Jira issue key is null. Cannot add comment.")
           }
         }
       }
     }
-  }
 
+    stage('Transition Jira Issue to Done') {
+      steps {
+          def issueKey = env.JIRA_ISSUE_KEY
+          withEnv(['JIRA_SITE=jira']) {
+            def transitionInput =
+            [
+                transition: [
+                    id: '31'
+                ]
+            ]
+
+            jiraTransitionIssue idOrKey: issueKey, input: transitionInput
+             }
+        }
+      }
+    }
+  }
   post {
     always {
       echo 'Pipeline completed.'
