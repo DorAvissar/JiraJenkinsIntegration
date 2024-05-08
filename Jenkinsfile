@@ -49,25 +49,18 @@ pipeline {
       }
     }
 
-    stage('Transition Jira Issue to Done') {
-      steps {
+stage('Transition Jira Issue to Done') {
+    steps {
         script {
-          def issueKey = env.JIRA_ISSUE_KEY
-          def transitionName = 'Done'
-
-          if (issueKey && transitionName) {
-            withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
-              jiraTransitionIssue(
-                issueSelector: [issueKey: issueKey], // Corrected parameter for issueSelector
-                transitionName: transitionName,
-                jiraUrl: JIRA_BASE_URL,
-                credentialsId: JIRA_CREDENTIALS_ID
-              )
+            if (env.JIRA_ISSUE_KEY) {
+                jira = [jiraUrl: env.JIRA_BASE_URL]
+                issue_transition(env.JIRA_ISSUE_KEY, status='31')
+            } else {
+                error("Cannot transition Jira issue to Done. The JIRA_ISSUE_KEY environment variable is missing.")
             }
-          } else {
-            error("Cannot transition Jira issue to Done. Required parameters are missing.")
-          }
         }
+    }
+}
       }
     }
   }
