@@ -17,10 +17,8 @@ pipeline {
         stage('Get Last Merged Branch Name') {
             steps {
                 script {
-                    // Get the last commit message and extract the branch name
                     def lastCommitMessage = sh(script: 'git log -1 --pretty=format:%s', returnStdout: true).trim()
 
-                    // Define a pattern to extract the branch name from the commit message
                     def mergeBranchPattern = ~/Merge pull request #\d+ from (.+)/
                     def matcher = lastCommitMessage =~ mergeBranchPattern
 
@@ -48,20 +46,25 @@ pipeline {
             }
         }
 
-         stage('Transition Jira Issue to Done') {
+        stage('Transition Jira Issue to Done') {
             steps {
                 script {
-                    if (env.JIRA_ISSUE_KEY) {
-                        withEnv(["JIRA_SITE=${JIRA_SITE_NAME}", "JIRA_URL=${env.JIRA_BASE_URL}"]) {
-                            jiraTransitionIssue(idOrKey: env.JIRA_ISSUE_KEY, transition: '31')
+                    def issueKey = env.JIRA_ISSUE_KEY
+
+                    if (issueKey) {
+                        withEnv(["JIRA_SITE=${JIRA_SITE_NAME}", "JIRA_URL=${JIRA_BASE_URL}"]) {
+                            jiraTransitionIssue(
+                                issueSelector: [issueKey: issueKey], 
+                                transition: '31' // Transition ID
+                            )
                         }
                     } else {
                         error("Cannot transition Jira issue to Done. The JIRA_ISSUE_KEY environment variable is missing.")
-                        }
-                    }
-                }
+                    }
+                }
             }
         }
+    }
 
     post {
         always {
