@@ -38,18 +38,32 @@ pipeline {
           def transitionId = '31' // Transition ID for "Done"
 
           if (issueKey) {
-            withEnv(["JIRA_SITE=${JIRA_SITE_NAME}"]) {
-              jiraTransitionIssue(
-                issueSelector: [issueKey: issueKey], // Correct parameter for issueSelector
-                transition: [id: transitionId], // Corrected transition parameter
-                jiraUrl: JIRA_BASE_URL,
-                credentialsId: JIRA_CREDENTIALS_ID,
-                update: [
-                  comment: [
-                    [add: [body: "Transitioning to Done from Jenkins Pipeline."]]
+            // Make a REST API call to transition the Jira issue
+            def response = httpRequest(
+              url: "${JIRA_BASE_URL}/rest/api/2/issue/${issueKey}/transitions",
+              httpMode: 'POST',
+              contentType: 'APPLICATION_JSON',
+              requestBody: """
+              {
+                "transition": {
+                  "id": "${transitionId}"
+                },
+                "update": {
+                  "comment": [
+                    {
+                      "add": {
+                        "body": "Transitioning to Done from Jenkins Pipeline."
+                      }
+                    }
                   ]
-                ]
-              )
+                }
+              }
+              """,
+              authentication: JIRA_CREDENTIALS_ID
+            )
+
+            if (response.status != 204) {
+              error("Failed to transition Jira issue ${issueKey} to Done. HTTP status: ${response.status}")
             }
           } else {
             error("Cannot transition Jira issue to Done. The JIRA_ISSUE_KEY environment variable is missing.")
