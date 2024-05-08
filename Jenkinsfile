@@ -41,7 +41,7 @@ pipeline {
             // Make a REST API call with curl
             sh """
               curl -X POST \
-              -u \${jira_cred} \
+              -u \${JIRA_CREDENTIALS_ID} \
               -H 'Content-Type: application/json' \
               -d '{
                 "transition": {
