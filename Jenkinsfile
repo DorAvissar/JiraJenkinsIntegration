@@ -38,13 +38,12 @@ pipeline {
           def transitionId = '31' // Transition ID for "Done"
 
           if (issueKey) {
-            // Make a REST API call to transition the Jira issue
-            def response = httpRequest(
-              url: "${JIRA_BASE_URL}/rest/api/2/issue/${issueKey}/transitions",
-              httpMode: 'POST',
-              contentType: 'APPLICATION_JSON',
-              requestBody: """
-              {
+            // Make a REST API call with curl
+            sh """
+              curl -X POST \
+              -u \${JIRA_CREDENTIALS_ID} \
+              -H 'Content-Type: application/json' \
+              -d '{
                 "transition": {
                   "id": "${transitionId}"
                 },
@@ -57,14 +56,9 @@ pipeline {
                     }
                   ]
                 }
-              }
-              """,
-              authentication: JIRA_CREDENTIALS_ID
-            )
-
-            if (response.status != 204) {
-              error("Failed to transition Jira issue ${issueKey} to Done. HTTP status: ${response.status}")
-            }
+              }' \
+              ${JIRA_BASE_URL}/rest/api/2/issue/${issueKey}/transitions
+            """
           } else {
             error("Cannot transition Jira issue to Done. The JIRA_ISSUE_KEY environment variable is missing.")
           }
