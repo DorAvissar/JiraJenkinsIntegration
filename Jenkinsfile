@@ -2,9 +2,8 @@ pipeline {
   agent any
   
   environment {
-    JIRA_CREDENTIALS_ID = 'jira_cred' // Jenkins credentials ID for Jira
     JIRA_BASE_URL = 'http://172.206.241.10:8080/' // Jira instance URL
-    JIRA_SITE_NAME = 'jira' // Jira site name configured in Jenkins
+    TRANSITION_ID = '31' // Transition ID for "Done"
   }
   
   stages {
@@ -35,30 +34,31 @@ pipeline {
       steps {
         script {
           def issueKey = env.JIRA_ISSUE_KEY
-          def transitionId = '31' // Transition ID for "Done"
 
           if (issueKey) {
-            // Make a REST API call with curl
-            sh """
-              curl -X POST \
-              -u \${JIRA_CREDENTIALS_ID} \
-              -H 'Content-Type: application/json' \
-              -d '{
-                "transition": {
-                  "id": "${transitionId}"
-                },
-                "update": {
-                  "comment": [
-                    {
-                      "add": {
-                        "body": "Transitioning to Done from Jenkins Pipeline."
+            // Use 'withCredentials' to securely get credentials
+            withCredentials([usernamePassword(credentialsId: 'jira_cred', passwordVariable: 'JIRA_PASSWORD', usernameVariable: 'JIRA_USER')]) {
+              sh """
+                curl -X POST \
+                -u \${JIRA_USER}:\${JIRA_PASSWORD} \
+                -H 'Content-Type: application/json' \
+                -d '{
+                  "transition": {
+                    "id": "${TRANSITION_ID}"
+                  },
+                  "update": {
+                    "comment": [
+                      {
+                        "add": {
+                          "body": "Transitioning to Done from Jenkins Pipeline."
+                        }
                       }
-                    }
-                  ]
-                }
-              }' \
-              ${JIRA_BASE_URL}/rest/api/2/issue/${issueKey}/transitions
-            """
+                    ]
+                  }
+                }' \
+                \${JIRA_BASE_URL}/rest/api/2/issue/\${issueKey}/transitions
+              """
+            }
           } else {
             error("Cannot transition Jira issue to Done. The JIRA_ISSUE_KEY environment variable is missing.")
           }
