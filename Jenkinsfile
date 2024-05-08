@@ -3,17 +3,11 @@ pipeline {
   
   environment {
     JIRA_CREDENTIALS_ID = 'jira_cred' // Jenkins credentials ID for Jira
-    JIRA_BASE_URL = 'http://172.206.241.10:8080/' // Jira instance URL
-    JIRA_SITE_NAME = 'jira' // Jira site name configured in Jenkins
+    JIRA_BASE_URL = 'http://172.206.241.10:8080/' // Jira  URL
+    JIRA_SITE_NAME = 'jira' // Jira site name 
   }
   
   stages {
-    stage('Hello World') {
-      steps {
-        sh 'echo "Hello World!"'
-      }
-    }
-
     stage('Get Last Merged Branch Name') {
       steps {
         script {
