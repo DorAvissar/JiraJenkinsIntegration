@@ -50,13 +50,13 @@ pipeline {
       steps {
         script {
           def issueKey = env.JIRA_ISSUE_KEY
-          def transitionName = 'Done' // Transition name
+          def transitionId = '31' // Transition ID for "Done"
 
           if (issueKey) {
             withEnv(["JIRA_SITE=${JIRA_SITE_NAME}"]) {
               jiraTransitionIssue(
-                issueSelector: [issueKey: issueKey], // Corrected parameter name
-                transitionName: transitionName, // Corrected parameter structure
+                issueSelector: [key: issueKey], // Corrected parameter for issueSelector
+                transitionId: transitionId, // Corrected parameter for transition
                 jiraUrl: JIRA_BASE_URL,
                 credentialsId: JIRA_CREDENTIALS_ID
               )
