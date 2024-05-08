@@ -48,12 +48,12 @@ pipeline {
             }
         }
 
-        stage('Transition Jira Issue to Done') {
+          stage('Transition Jira Issue to Done') {
             steps {
                 script {
                     if (env.JIRA_ISSUE_KEY) {
                         jira = [jiraUrl: env.JIRA_BASE_URL]
-                        issue_transition(env.JIRA_ISSUE_KEY, status='31')
+                        jiraTransitionIssue(idOrKey: env.JIRA_ISSUE_KEY, transition: '31')
                     } else {
                         error("Cannot transition Jira issue to Done. The JIRA_ISSUE_KEY environment variable is missing.")
                     }
