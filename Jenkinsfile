@@ -39,7 +39,7 @@ pipeline {
           def issueKey = env.JIRA_ISSUE_KEY
 
           if (issueKey) {
-            withEnv(['JIRA_SITE=' + JIRA_SITE_NAME]) {
+            withEnv(["JIRA_SITE=${JIRA_SITE_NAME}"]) {
               jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
             }
           } else {
@@ -51,23 +51,27 @@ pipeline {
 
     stage('Transition Jira Issue to Done') {
       steps {
-          withEnv(['JIRA_SITE=jira']) {
-            def transitionInput =
-            [
-                transition: [
-                    id: '31'
-                ]
-            ]
-
-            jiraTransitionIssue idOrKey: issueKey, input: transitionInput
-             }
+        script {
+          def issueKey = env.JIRA_ISSUE_KEY
+          if (issueKey) {
+            withEnv(["JIRA_SITE=jira"]) {
+              def transitionInput = [
+                transition: [id: '31']
+              ]
+              
+              jiraTransitionIssue idOrKey: issueKey, input: transitionInput
+            }
+          } else {
+            error("Jira issue key is null. Cannot transition to Done.")
+          }
         }
       }
     }
   }
+  
   post {
     always {
       echo 'Pipeline completed.'
     }
   }
-
+}
