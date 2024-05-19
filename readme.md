@@ -20,11 +20,12 @@ Use your chosen configuration and infrastructure as code utility (Terraform/Chef
    note that the  initial Jenkins admin password is located in "/var/jenkins_home/secrets/initialAdminPassword" 
 
 3. **Jira and Jenkins Integration**
-   - Download the Jira plugin in Jenkins.
+   - Download the Jira plugin in Jenkins (jira integration, jira issue  updater, jira plugin)
    - Configure Jira authentication in Jenkins using a username and password.
    - Create a Jira site and verify the connection.
-   <img src="https://github.com/DorAvissar/ResumeChallenge-/blob/main/diagram.png?raw=true">
-   <img src="https://github.com/DorAvissar/ResumeChallenge-/blob/main/diagram.png?raw=true">
+   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jirasite.png?raw=true>
+   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jirasite2.png?raw=true">
+   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jirasite3.png?raw=true">
 
 4. **Jenkins and Git Integration**
    To establish a connection between Jenkins and GitHub, you need to create a webhook in GitHub that communicates with Jenkins. Follow these steps to configure it properly:
