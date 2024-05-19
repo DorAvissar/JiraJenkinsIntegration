@@ -20,7 +20,7 @@ Use your chosen configuration and infrastructure as code utility (Terraform/Chef
    note that the  initial Jenkins admin password is located in "/var/jenkins_home/secrets/initialAdminPassword" 
 
 3. **Jira and Jenkins Integration**
-   - Download the Jira plugin in Jenkins (jira integration, jira issue  updater, jira plugin)
+   - Download the Jira plugin in Jenkins (jira integration, jira issue updater, jira plugin, jira pipeline steps)
    - Configure Jira authentication in Jenkins using a username and password.
    - Create a Jira site and verify the connection.
 
@@ -66,7 +66,9 @@ By implementing these configurations, you enable smooth communication between Je
 5. **Jenkins File**
    As previously explained, Jenkins relies on the Jenkinsfile stored in your Git repository to execute the build process. To accomplish your specific task of updating Jira issues to "Done" based on branch names, you'll need to craft the Jenkinsfile accordingly.
    The Jenkinsfile should be designed to retrieve the branch name and then verify its existence as an issue in Jira. If the branch corresponds to an existing issue, the Jenkinsfile should incorporate plugin functions to transition the issue status to "Done."
-   During this process, I consulted various documentation resources to ensure accurate implementation. Additionally, you're welcome to examine the Jenkinsfile within my repository for further insights into the implementation details.
+   During this process, I consulted various <a href="https://jenkinsci.github.io/jira-steps-plugin/getting-started/"> documentation resources</a> to ensure accurate implementation. Additionally, you're welcome to examine the Jenkinsfile within my repository for further insights into the implementation details.
+
+Hope you enjoy the project ! 
 
  <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/finalstep.png?raw=true">
 
