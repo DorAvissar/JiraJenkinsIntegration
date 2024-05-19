@@ -27,22 +27,6 @@ pipeline {
       }
     }
 
-    stage('Add Comment to Jira') {
-      steps {
-        script {
-          def issueKey = env.JIRA_ISSUE_KEY
-
-          if (issueKey) {
-            withEnv(["JIRA_SITE=${JIRA_SITE_NAME}"]) {
-              jiraAddComment(idOrKey: issueKey, comment: 'Test comment from Jenkins')
-            }
-          } else {
-            error("Jira issue key is null. Cannot add comment.")
-          }
-        }
-      }
-    }
-
     stage('Transition Jira Issue to Done') {
       steps {
         script {
