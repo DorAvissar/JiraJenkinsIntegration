@@ -54,11 +54,13 @@ Use your chosen configuration and infrastructure as code utility (Terraform/Chef
    - Define Pipeline: Within the pipeline section, specify the path to your Jenkinsfile. This file serves as the blueprint for your Jenkins builds, defining the steps and actions to be executed.
 By implementing these configurations, you enable smooth communication between Jenkins and GitHub. This integration empowers Jenkins to automatically trigger builds and execute predefined actions in response to events occurring within your GitHub repository.
 
-   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/githubwebhook1.png?raw=true">
+   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jenkinsconfig1.png?raw=true">
 
-   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/githubwebhook2.png?raw=true">
+   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jenkinsconfig2.png?raw=true">
 
-   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/githubwebhook.png?raw=true">
+   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jenkinsconfig3.png?raw=true">
+
+   <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jenkinsconfig4.png?raw=true">
 
 
 5. **Jenkins File**
