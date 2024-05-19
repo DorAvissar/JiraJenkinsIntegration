@@ -12,8 +12,12 @@ Use your chosen configuration and infrastructure as code utility (Terraform/Chef
 
 ### So, lets solve it: 
 
+<img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jirasite.png?raw=true">
+
+
 1. **Creating docker-compose file with jira and jenkins**
 - I used Docker Compose to run all environments locally, aiming for convenience and efficiency, you can check out the file in the repository. 
+
 
 2. **Services Verification and User Configuration**
    After setting up the Docker Compose, I verified that all environments were running properly, with each container accessible. Additionally, I logged into each site to create and configure user accounts as instructed.

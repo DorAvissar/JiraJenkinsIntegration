@@ -1,0 +1,72 @@
+<mxfile modified="2024-05-19T11:53:31.046Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="Zu7nPTK5ZF6sV__xfALO" version="24.4.4" type="device">
+  <diagram id="7gcUSTIZ7YSJ5vT40chW" name="Page-1">
+    <mxGraphModel dx="808" dy="402" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.033;exitY=0.503;exitDx=0;exitDy=0;exitPerimeter=0;strokeColor=#808080;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="723.79" y="239" as="sourcePoint" />
+            <mxPoint x="583.79" y="239.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-23" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;Trigger Webhook&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="f9WjoW6uBqFjOTgmhgBF-4">
+          <mxGeometry x="-0.6654" y="-1" relative="1" as="geometry">
+            <mxPoint x="-40" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-14" value="Github&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-social-github-128.png" vertex="1" parent="1">
+          <mxGeometry x="728" y="198" width="41" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-15" value="Jira&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="image;html=1;image=img/lib/atlassian/Jira_Software_Logo.svg;" vertex="1" parent="1">
+          <mxGeometry x="359" y="197" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-17" value="Jenkins" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Jenkins_logo.svg/1200px-Jenkins_logo.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="545.02" y="196" width="31.54" height="43.55" as="geometry" />
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.033;exitY=0.503;exitDx=0;exitDy=0;exitPerimeter=0;strokeColor=#808080;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="538" y="238.5" as="sourcePoint" />
+            <mxPoint x="398" y="239" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-24" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;Build&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=0" vertex="1" connectable="0" parent="f9WjoW6uBqFjOTgmhgBF-19">
+          <mxGeometry x="-0.0949" y="2" relative="1" as="geometry">
+            <mxPoint y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-20" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;strokeColor=#878787;exitX=0;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="f9WjoW6uBqFjOTgmhgBF-29">
+          <mxGeometry width="100" relative="1" as="geometry">
+            <mxPoint x="530" y="370" as="sourcePoint" />
+            <mxPoint x="390" y="260" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-21" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;strokeColor=#828282;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="f9WjoW6uBqFjOTgmhgBF-29">
+          <mxGeometry width="100" relative="1" as="geometry">
+            <mxPoint x="560" y="350" as="sourcePoint" />
+            <mxPoint x="560" y="260" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-25" value="User" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Person.svg;" vertex="1" parent="1">
+          <mxGeometry x="884" y="201" width="28.12" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#808080;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="880" y="238" as="sourcePoint" />
+            <mxPoint x="769" y="239" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-27" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;PR&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="f9WjoW6uBqFjOTgmhgBF-26">
+          <mxGeometry x="-0.6654" y="-1" relative="1" as="geometry">
+            <mxPoint x="-40" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9WjoW6uBqFjOTgmhgBF-29" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://quintagroup.com/cms/technology/Images/docker-compose-button.jpg;" vertex="1" parent="1">
+          <mxGeometry x="518.12" y="360" width="83.33" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
