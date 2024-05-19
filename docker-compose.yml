@@ -1,64 +1,30 @@
 version: '3.8'
 services:
-  jira:  
-    image: atlassian/jira-software:9.14.0
+  jira:
+    image: atlassian/jira-software:9.5.0
+    container_name: jira
     ports:
-      - "9090:8080"
-    environment:
-      - ATL_JDBC_URL=jdbc:postgresql://db/jira
-      - ATL_JDBC_USER=jira
-      - ATL_JDBC_PASSWORD=jira_password
-      - ATL_JDBC_DRIVER=org.postgresql.Driver
-    depends_on:
-      - db
+      - "8090:8080"
+    networks:
+      - atlassian
     volumes:
       - jira_data:/var/atlassian/jira
-    networks:
-      - atlassian
-  confluence:
-    image: atlassian/confluence-server:latest
-    ports:
-      - "8090:8090"
-    environment:
-      - CONFLUENCE_DB_URL=jdbc:postgresql://db/confluence
-      - CONFLUENCE_DB_USER=jira
-      - CONFLUENCE_DB_PASSWORD=jira_password
-    depends_on:
-      - db
-    volumes:
-      - confluence_data:/var/atlassian/confluence
-    networks:
-      - atlassian
 
   jenkins:
     image: jenkins/jenkins:lts
+    container_name: jenkins
     ports:
       - "8085:8080"
-      - "50000:50000"
+    networks:
+      - atlassian
     volumes:
       - jenkins_home:/var/jenkins_home
-    networks:
-      - atlassian
-
-  db:
-    image: postgres:latest
-    environment:
-      - POSTGRES_USER=jira
-      - POSTGRES_PASSWORD=jira_password
-      - POSTGRES_DB=jira
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    networks:
-      - atlassian
-  
-volumes:
-  jira_data:
-  confluence_data:
-  jenkins_home:
-  pg_data:
 
 
 networks:
   atlassian:
     driver: bridge
-    name: atlassian
+
+volumes:
+  jira_data:
+  jenkins_home:
