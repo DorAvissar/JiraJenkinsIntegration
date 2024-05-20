@@ -12,7 +12,7 @@ Use your chosen configuration and infrastructure as code utility (Terraform/Chef
 
 ### So, lets solve it: 
 
-<img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/jirasite.png?raw=true">
+<img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/diagram.jpg.jpg?raw=true">
 
 
 1. **Creating docker-compose file with jira and jenkins**
