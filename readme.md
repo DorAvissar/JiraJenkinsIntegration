@@ -72,6 +72,8 @@ By implementing these configurations, you enable smooth communication between Je
    The Jenkinsfile should be designed to retrieve the branch name and then verify its existence as an issue in Jira. If the branch corresponds to an existing issue, the Jenkinsfile should incorporate plugin functions to transition the issue status to "Done."
    During this process, I consulted various <a href="https://jenkinsci.github.io/jira-steps-plugin/getting-started/"> documentation resources</a> to ensure accurate implementation. Additionally, you're welcome to examine the Jenkinsfile within my repository for further insights into the implementation details.
 
+**note that every time the containers will restart , the ip adress configure in the jira site url will need to be updated. 
+
 Hope you enjoy the project ! 
 
  <img src="https://github.com/DorAvissar/JiraJenkinsIntegration/blob/main/assets/finalstep.png?raw=true">
