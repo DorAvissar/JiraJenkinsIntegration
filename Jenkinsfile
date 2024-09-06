@@ -1,5 +1,5 @@
-pipeline {
-  agent any
+// pipeline {
+//   agent any
     
   stages {
     stage('Get Last Merged Branch Name') {
